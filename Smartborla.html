@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Borla Bin Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Light gray background */
+            display: flex;
+            flex-direction: column; /* Allow vertical stacking for button and bin */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            gap: 20px; /* Space between button and bin */
+        }
+
+        .bin-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px; /* Max width for desktop view */
+            background-color: #388e3c; /* Darker green for the bin */
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            border: 4px solid #2e7d32; /* Darker border for depth */
+        }
+
+        .bin-top {
+            background-color: #2e7d32; /* Slightly darker green for the lid */
+            height: 80px;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 15px;
+        }
+
+        .solar-panel {
+            width: 80%;
+            height: 40px;
+            background-color: #1a237e; /* Dark blue for solar panel */
+            border-radius: 8px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-content: space-around;
+            padding: 5px;
+            gap: 2px;
+        }
+
+        .solar-cell {
+            width: 20px;
+            height: 15px;
+            background-color: #42a5f5; /* Lighter blue for solar cells */
+            border-radius: 3px;
+        }
+
+        .bin-body {
+            padding: 20px;
+            position: relative; /* Needed for absolute positioning of waste item */
+            min-height: 350px; /* Ensure enough space for waste item animation */
+        }
+
+        .display-screen {
+            background-color: #e0e0e0; /* Light gray for screen background */
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+            min-height: 150px;
+            position: relative; /* For waste chute */
+            overflow: hidden; /* Hide waste item outside chute initially */
+            z-index: 1; /* Ensure screen content is above waste item initially */
+        }
+
+        .waste-chute {
+            position: absolute;
+            top: 0px; /* Position relative to .bin-body */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 30px;
+            background-color: #c0c0c0; /* Gray for the opening */
+            border-radius: 0 0 10px 10px;
+            box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.3);
+            z-index: 10; /* Above other elements */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .waste-item {
+            position: absolute;
+            top: -50px; /* Start above the chute, relative to .bin-body */
+            /* Left will be calculated dynamically */
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ff0000; /* Default red for rejected */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            z-index: 11; /* Above chute and screen */
+            transition: top 0.7s ease-in, left 0.5s ease-out, opacity 0.3s ease-out; /* Animation for falling and sorting */
+            opacity: 0;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .recycling-icon {
+            font-size: 60px;
+            color: #388e3c; /* Green recycling icon */
+            margin-bottom: 10px;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .status-icon {
+            width: 30px;
+            height: 30px;
+            background-color: #757575; /* Gray for placeholder icons */
+            border-radius: 5px;
+        }
+        .status-icon.active {
+            background-color: #4CAF50; /* Green for active status */
+        }
+        .status-icon.warning {
+            background-color: #FFC107; /* Yellow for warning status */
+        }
+        .status-icon.alert {
+            background-color: #F44336; /* Red for alert status */
+        }
+
+        .message-box {
+            margin-top: 10px;
+            padding: 8px 15px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            color: #333;
+            font-size: 0.9em;
+            text-align: center;
+            min-height: 40px; /* Ensure space for message */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 90%; /* Occupy most of the screen width */
+            box-sizing: border-box;
+        }
+
+        .compartments {
+            display: flex;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            min-height: 150px; /* Adjusted height to fit within bin-body */
+            margin-top: 20px; /* Space from display screen */
+        }
+
+        .compartment {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 5px;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: default;
+        }
+
+        /* Specific compartment colors */
+        .plastic { background-color: #2196f3; /* Blue */ }
+        .metal { background-color: #ff9800; /* Orange */ }
+        .glass { background-color: #4caf50; /* Green */ }
+        .rejected { background-color: #f44336; /* Red */ } /* Color for rejected waste */
+
+        .bin-wheels {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px 10px;
+            box-sizing: border-box;
+        }
+
+        .wheel {
+            width: 40px;
+            height: 40px;
+            background-color: #424242; /* Dark gray for wheels */
+            border-radius: 50%;
+            border: 3px solid #212121;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .simulate-button {
+            padding: 12px 25px;
+            background: linear-gradient(145deg, #4CAF50, #388E3C); /* Green gradient */
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .simulate-button:hover {
+            background: linear-gradient(145deg, #388E3C, #4CAF50);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .simulate-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+                gap: 15px;
+            }
+            .bin-container {
+                max-width: 95%;
+                border-radius: 15px;
+            }
+            .bin-top {
+                height: 60px;
+                padding-top: 10px;
+                border-radius: 15px 15px 0 0;
+            }
+            .solar-panel {
+                width: 90%;
+                height: 30px;
+                border-radius: 6px;
+                padding: 3px;
+            }
+            .solar-cell {
+                width: 18px;
+                height: 12px;
+            }
+            .bin-body {
+                padding: 15px;
+                min-height: 300px; /* Adjust for smaller screens */
+            }
+            .display-screen {
+                padding: 10px;
+                min-height: 120px;
+            }
+            .recycling-icon {
+                font-size: 50px;
+            }
+            .status-icons {
+                gap: 10px;
+            }
+            .status-icon {
+                width: 25px;
+                height: 25px;
+            }
+            .message-box {
+                font-size: 0.8em;
+                padding: 6px 10px;
+                min-height: 35px;
+            }
+            .compartments {
+                min-height: 140px;
+                margin-top: 15px;
+            }
+            .compartment {
+                padding: 10px 3px;
+                font-size: 0.9em;
+            }
+            .compartment-icon {
+                font-size: 35px;
+            }
+            .wheel {
+                width: 30px;
+                height: 30px;
+                border: 2px solid #212121;
+            }
+            .waste-chute {
+                width: 60px;
+                height: 20px;
+            }
+            .waste-item {
+                width: 30px;
+                height: 30px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="simulate-button" onclick="simulateWasteDrop()">Simulate Simultaneous Waste Drop</button>
+
+    <div class="bin-container">
+        <!-- Bin Top / Lid with Solar Panel -->
+        <div class="bin-top">
+            <div class="solar-panel">
+                <!-- Solar cells -->
+                <div class="solar-cell"></div>
+                <div class="solar-cell"></div>
+                <div class="solar-cell"></div>
+                <div class="solar-cell"></div>
+                <div class="solar-cell"></div>
+                <div class="solar-cell"></div>
+                <div class="solar-cell"></div>
+                <div class="solar-cell"></div>
+            </div>
+        </div>
+
+        <!-- Bin Body -->
+        <div class="bin-body">
+            <!-- Waste Chute (opening where waste is dropped) -->
+            <div class="waste-chute"></div>
+
+            <!-- Display Screen -->
+            <div class="display-screen">
+                <span class="recycling-icon">♻️</span> <!-- Recycling emoji as icon -->
+                <div class="status-icons">
+                    <div class="status-icon active" title="System Active"></div>
+                    <div class="status-icon warning" title="Bin Nearing Full"></div>
+                    <div class="status-icon alert" title="Maintenance Required"></div>
+                </div>
+                <div id="messageBox" class="message-box">Ready for waste!</div>
+            </div>
+
+            <!-- Segregation Compartments -->
+            <div class="compartments">
+                <div class="compartment plastic" id="plasticCompartment">
+                    <span class="compartment-icon">🧴</span> <!-- Bottle emoji for plastic -->
+                    Plastic
+                </div>
+                <div class="compartment metal" id="metalCompartment">
+                    <span class="compartment-icon">🥫</span> <!-- Can emoji for metal -->
+                    Metal
+                </div>
+                <div class="compartment glass" id="glassCompartment">
+                    <span class="compartment-icon">🥛</span> <!-- Glass of milk emoji for glass -->
+                    Glass
+                </div>
+                <div class="compartment rejected" id="rejectedCompartment">
+                    <span class="compartment-icon">🗑️</span> <!-- Trash can emoji for rejected -->
+                    Rejected Waste
+                </div>
+            </div>
+        </div>
+
+        <!-- Bin Wheels -->
+        <div class="bin-wheels">
+            <div class="wheel"></div>
+            <div class="wheel"></div>
+        </div>
+    </div>
+
+    <script>
+        // Get elements
+        const binBody = document.querySelector('.bin-body');
+        const messageBox = document.getElementById('messageBox');
+        const displayScreen = document.querySelector('.display-screen');
+        const wasteChute = document.querySelector('.waste-chute');
+        const compartments = {
+            plastic: document.getElementById('plasticCompartment'),
+            metal: document.getElementById('metalCompartment'),
+            glass: document.getElementById('glassCompartment'),
+            rejected: document.getElementById('rejectedCompartment')
+        };
+
+        const wasteTypes = [
+            { type: 'plastic', emoji: '🧴', color: '#2196f3' },
+            { type: 'metal', emoji: '🥫', color: '#ff9800' },
+            { type: 'glass', emoji: '🥛', color: '#4caf50' },
+            { type: 'rejected', emoji: '🗑️', color: '#f44336' }
+        ];
+
+        /**
+         * Simulates the journey of a single waste item from drop to segregation.
+         * @param {HTMLElement} itemElement - The DOM element representing the waste item.
+         * @param {Object} wasteType - The type of waste (e.g., plastic, metal).
+         * @param {number} delay - Initial delay before this item starts falling.
+         */
+        async function animateWasteItem(itemElement, wasteType, delay = 0) {
+            const wasteItemSize = itemElement.offsetWidth;
+            const chuteRect = wasteChute.getBoundingClientRect();
+            const binBodyRect = binBody.getBoundingClientRect();
+
+            // Set initial position above the chute with slight horizontal variation
+            const chuteCenterLeft = (chuteRect.left + chuteRect.width / 2) - binBodyRect.left;
+            const horizontalOffset = (Math.random() - 0.5) * 40; // Small random offset for visual spread
+            itemElement.style.left = `${chuteCenterLeft - (wasteItemSize / 2) + horizontalOffset}px`;
+            itemElement.style.opacity = '1';
+
+            await new Promise(resolve => setTimeout(resolve, delay));
+
+            // Step 1: Waste appears and falls into display screen area
+            itemElement.style.transition = 'top 0.7s ease-in, opacity 0.3s ease-out';
+            itemElement.style.top = `${displayScreen.offsetTop + displayScreen.offsetHeight - (wasteItemSize / 2) - 10}px`;
+            messageBox.textContent = `Waste detected! Analyzing...`; // This will update for each item, showing quick succession
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            // Step 2: AI Detection & Pause
+            messageBox.textContent = `AI sorting: ${wasteType.type.toUpperCase()}...`;
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Step 3: Waste moves horizontally to target compartment
+            const targetCompartment = compartments[wasteType.type];
+            if (targetCompartment) {
+                const compartmentRect = targetCompartment.getBoundingClientRect();
+                const targetLeft = (compartmentRect.left + compartmentRect.width / 2) - binBodyRect.left - (wasteItemSize / 2);
+
+                itemElement.style.transition = 'left 0.8s ease-in-out';
+                itemElement.style.left = `${targetLeft}px`;
+                messageBox.textContent = `Directing to ${wasteType.type} compartment...`;
+                await new Promise(resolve => setTimeout(resolve, 900));
+            }
+
+            // Step 4: Waste falls into compartment and disappears
+            itemElement.style.transition = 'top 0.5s ease-in, opacity 0.3s ease-out';
+            itemElement.style.top = `${displayScreen.offsetTop + displayScreen.offsetHeight + compartments.plastic.offsetHeight + 20}px`;
+            itemElement.style.opacity = '0';
+            messageBox.textContent = `${wasteType.type.charAt(0).toUpperCase() + wasteType.type.slice(1)} segregated!`;
+
+            // Briefly highlight the target compartment
+            if (targetCompartment) {
+                targetCompartment.style.transform = 'scale(1.05)';
+                targetCompartment.style.boxShadow = '0 0 15px rgba(255,255,255,0.8)';
+                await new Promise(resolve => setTimeout(resolve, 500));
+                targetCompartment.style.transform = '';
+                targetCompartment.style.boxShadow = '';
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 500));
+            itemElement.remove();
+        }
+
+        /**
+         * Simulates specific waste items being dropped simultaneously (appearing together)
+         * and then processed sequentially.
+         */
+        async function simulateWasteDrop() {
+            const simulateButton = document.querySelector('.simulate-button');
+            simulateButton.disabled = true;
+
+            const itemsToDrop = [
+                wasteTypes.find(w => w.type === 'plastic'),
+                wasteTypes.find(w => w.type === 'metal'),
+                wasteTypes.find(w => w.type === 'glass'),
+                wasteTypes.find(w => w.type === 'rejected')
+            ];
+
+            // Shuffle the order for a slightly varied simulation each time
+            itemsToDrop.sort(() => Math.random() - 0.5);
+
+            messageBox.textContent = `Multiple items detected! Initiating sorting...`;
+
+            // Create and position all items initially at the chute, slightly staggered
+            const createdItems = [];
+            itemsToDrop.forEach((itemType, index) => {
+                const wasteItemElement = document.createElement('div');
+                wasteItemElement.className = 'waste-item';
+                binBody.appendChild(wasteItemElement);
+
+                wasteItemElement.textContent = itemType.emoji;
+                wasteItemElement.style.backgroundColor = itemType.color;
+                wasteItemElement.style.borderRadius = itemType.type === 'plastic' ? '50%' : '8px';
+
+                // Apply initial position for all items, with a slight vertical stagger
+                const chuteRect = wasteChute.getBoundingClientRect();
+                const binBodyRect = binBody.getBoundingClientRect();
+                const chuteCenterLeft = (chuteRect.left + chuteRect.width / 2) - binBodyRect.left;
+                const horizontalOffset = (index - (itemsToDrop.length - 1) / 2) * 15; // Spread items horizontally
+                wasteItemElement.style.left = `${chuteCenterLeft - (wasteItemElement.offsetWidth / 2) + horizontalOffset}px`;
+                wasteItemElement.style.top = `${chuteRect.top - binBodyRect.top + (index * 10)}px`; // Vertical stagger
+                wasteItemElement.style.opacity = '1';
+                wasteItemElement.style.transition = 'none'; // No transition on initial placement
+
+                createdItems.push({ element: wasteItemElement, type: itemType });
+            });
+
+            // Wait a moment for all items to appear at the chute
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // Animate each item sequentially through the sorting process
+            for (const item of createdItems) {
+                // Ensure the item's transition is active for the animation steps
+                item.element.style.transition = 'top 0.7s ease-in, left 0.5s ease-out, opacity 0.3s ease-out';
+                await animateWasteItem(item.element, item.type, 0); // Pass 0 delay for sequential processing
+                await new Promise(resolve => setTimeout(resolve, 300)); // Small pause before next item starts sorting
+            }
+
+            messageBox.textContent = `All waste sorted! Ready for next drop.`;
+            simulateButton.disabled = false;
+        }
+    </script>
+
+</body>
+</html>

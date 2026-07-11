@@ -11,16 +11,34 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="icon" type="image/jpg" href="/assets/emojis.png">
   <style>
+    :root {
+      --surface-bg: radial-gradient(circle at 20% 20%, #112336 0%, #09131f 45%, #050a14 100%);
+      --surface-card: linear-gradient(145deg, rgba(26, 60, 60, 0.9), rgba(42, 96, 96, 0.9));
+      --surface-panel: linear-gradient(135deg, #0f2b4f 0%, #0c1b34 100%);
+      --accent: #1d7fa6;
+      --accent2: #22a5c3;
+      --text: #e8efff;
+      --text-muted: #dbe8ff;
+      --text-strong: #fff;
+      --button-bg: #22a5c3;
+      --button-hover-bg: #1fa5c7;
+      --footer-bg: #0f3d7d;
+      --footer-btn-bg: #2a4a8b;
+      --footer-btn-hover: #3a5aab;
+      --box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      --box-shadow-strong: 0 6px 12px rgba(0,0,0,0.2);
+    }
     body {
-      font-family: 'Arial', sans-serif;
-      background-color: #1A3C3C;
-      color: #E0E7E8;
+      font-family: 'Inter', 'Arial', sans-serif;
+      background: var(--surface-bg);
+      color: var(--text);
       margin: 0;
       padding: 0;
       line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     .navbar {
-      background-color: #0a2351;
+      background: linear-gradient(135deg, #0f2b4f 0%, #0c1b34 100%);
       padding: 1rem 2rem;
       display: flex;
       justify-content: center;
@@ -72,7 +90,7 @@
       margin-left: 1.5rem;
     }
     .nav-links a {
-      color: #E0E7E8;
+      color: var(--text);
       text-decoration: none;
       transition: color 0.3s ease, background-color 0.3s ease;
       display: flex;
@@ -84,12 +102,12 @@
       margin-right: 0.5rem;
     }
     .nav-links a:hover {
-      color: #fff;
-      background-color: #2a6f6f;
+      color: var(--text-strong);
+      background-color: var(--accent);
     }
     .nav-links a.nav-active {
-      background-color: #3a8f8f;
-      color: #fff;
+      background-color: var(--accent2);
+      color: var(--text-strong);
       font-weight: 600;
     }
     .sidebar {
@@ -98,8 +116,8 @@
       left: -280px;
       width: 280px;
       height: 100%;
-      background: linear-gradient(180deg, #1A3C3C, #2a6f6f);
-      color: #E0E7E8;
+      background: linear-gradient(180deg, #0d2d5a, var(--accent));
+      color: var(--text-muted);
       padding: 2rem 1.5rem;
       display: flex;
       flex-direction: column;
@@ -126,7 +144,7 @@
       margin-bottom: 1.2rem;
     }
     .sidebar-nav a {
-      color: #E0E7E8;
+      color: var(--text-muted);
       text-decoration: none;
       display: flex;
       align-items: center;
@@ -138,11 +156,11 @@
       margin-right: 0.75rem;
     }
     .sidebar-nav a:hover {
-      background-color: #3a8f8f;
+      background-color: #22a5c3;
       color: #fff;
     }
     .sidebar-nav a.nav-active {
-      background-color: #3a8f8f;
+      background-color: #22a5c3;
       color: #fff;
       font-weight: 600;
     }
@@ -287,14 +305,14 @@
     .btn {
       display: inline-block;
       padding: 0.75rem 1.5rem;
-      background-color: #2a6f6f;
-      color: #E0E7E8;
+      background-color: var(--button-bg);
+      color: #0b1b2f;
       text-decoration: none;
       border-radius: 5px;
       transition: background-color 0.3s ease;
     }
     .btn:hover {
-      background-color: #3a8f8f;
+      background-color: var(--button-hover-bg);
     }
     .icon-circle {
       display: inline-flex;
@@ -303,17 +321,26 @@
       width: 2rem;
       height: 2rem;
       border-radius: 50%;
-      background-color: #2a6f6f;
-      color: #E0E7E8;
+      background-color: var(--accent);
+      color: var(--text-muted);
       text-decoration: none;
       transition: background-color 0.3s ease;
     }
     .icon-circle:hover {
-      background-color: #3a8f8f;
+      background-color: var(--accent2);
     }
     footer {
-      background-color: #0a2351;
-      color: #e2e8f0;
+      background-color: var(--footer-bg);
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    .icon-circle:hover {
+      background-color: var(--accent2);
+    }
+    footer {
+      background-color: var(--footer-bg);
+      color: var(--text-muted);
       padding: 1.5rem 0;
       position: relative;
       z-index: 1000;
@@ -332,12 +359,12 @@
       text-align: center;
     }
     .footer-section p, .footer-section a {
-      color: #e2e8f0;
+      color: var(--text-muted);
       text-decoration: none;
       transition: color 0.3s ease;
     }
     .footer-section a:hover {
-      color: #fff;
+      color: var(--text-strong);
     }
     .footer-social {
       display: flex;
@@ -346,25 +373,35 @@
     }
     .footer-nav {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 0.75rem;
     }
     .back-to-top {
       display: inline-block;
       padding: 0.75rem 1.5rem;
-      background-color: #2a4a8b;
-      color: #e2e8f0;
+      background-color: var(--footer-btn-bg);
+      color: var(--text);
       text-decoration: none;
       border-radius: 5px;
       transition: background-color 0.3s ease;
     }
     .back-to-top:hover {
-      background-color: #3a5aab;
+      background-color: var(--footer-btn-hover);
     }
     .decorative-line {
       height: 1px;
       background: linear-gradient(to right, transparent, #4a5d5a, transparent);
       margin: 1rem 0;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
     @media (max-width: 768px) {
       .navbar {
@@ -467,6 +504,7 @@
   </style>
 </head>
 <body>
+  <a href="#main-content" class="skip-link" style="position:absolute; top:-40px; left:0; background:#fff; color:#000; padding:0.5rem 1rem; z-index:999; transition:top 0.2s ease;" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Skip to main content</a>
   <nav class="navbar">
     <div class="navbar-content">
       <div class="navbar-brand">👨‍💻 Dominic Njangnabe</div>
@@ -501,12 +539,12 @@
     </div>
   </div>
 
-  <div class="content" id="content">
+  <div class="content" id="main-content">
     <section class="hero">
       <div class="hero-text">
         <h1 class="text-6xl font-bold text-teal-100 mb-4">My Resume</h1>
         <p class="text-lg text-gray-200 mb-4">Professional Summary</p>
-        <p class="text-md text-gray-300 mb-6">Dedicated BSc Information Technology student at the University of Cape Coast with a passion for database Management (MySQL, Oracle, PostgreSQL, AWS RDS), automation with Python, programming with PHP, and data analysis with Excel and Power BI. Strong problem-solving and interpersonal skills, demonstrated through leadership in hackathons and academic projects.</p>
+        <p class="text-md text-gray-300 mb-6">Dedicated BSc Information Technology student at the University of Cape Coast, Aspiring Data Engineer, passionate about building scalable data infrastructure. Experienced with BigQuery, Snowflake, Airflow, dbt, Spark, Kafka, and Delta Lake. Skilled in data warehousing, pipeline orchestration, stream and batch processing, and data quality testing. Committed to delivering reliable, production-ready data systems that transform raw data into actionable insights.</p>
         <a href="Dominic cv.pdf" target="_blank" class="btn" onclick="window.open(this.href, '_blank'); return false;">Download Resume</a>
       </div>
     </section>
@@ -549,7 +587,7 @@
           <li><strong>Technical Skills</strong>:
             <ul>
               <li>Database Management: MySQL, Oracle, PostgreSQL, AWS RDS</li>
-              <li>Programming: Python (Database Automation), PHP, JavaScript, C++</li>
+              <li>Programming: Python (Database Automation), PHP, JavaScript</li>
               <li>Data Analysis: Microsoft Suite (Excel, Power BI)</li>
             </ul>
           </li>
@@ -614,36 +652,16 @@
   </div>
 
   <footer class="footer relative py-6">
-    <div class="footer-content max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-4 gap-6 text-center">
+    <div class="footer-content max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6 text-center">
       <div class="footer-section">
-        <p class="text-sm text-white font-medium mb-2">© 2025 Dominic Njangnabe. All rights reserved.</p>
-        <div class="decorative-line"></div>
-        <p class="text-xs text-gray-400 mt-2">Last Updated: September 03, 2025</p>
-      </div>
-      <div class="footer-section">
-        <h3 class="text-lg text-white font-semibold mb-3">About Me</h3>
-        <p class="text-sm text-gray-300">A passionate BSc IT student at the University of Cape Coast, specializing in database design with MySQL, Oracle, PostgreSQL, and AWS RDS, automation with Python, programming with PHP, and data analysis with Excel and Power BI. Recognized as Database Club Lead (2025)</p>
-        <div class="footer-social flex justify-center gap-4 mt-4">
-          <a href="https://www.facebook.com/njangnabe.dominic.5" class="icon-circle"><i class="fab fa-facebook-f text-lg"></i></a>
-          <a href="#" class="icon-circle"><i class="fab fa-twitter text-lg"></i></a>
-          <a href="https://www.linkedin.com/in/dominic-njangnabe-15163a2ab/" class="icon-circle"><i class="fab fa-linkedin-in text-lg"></i></a>
-          <a href="https://github.com/Badime111" class="icon-circle"><i class="fab fa-github text-lg"></i></a>
-          <a href="#" class="icon-circle"><i class="fab fa-instagram text-lg"></i></a>
-        </div>
-      </div>
-      <div class="footer-section">
-        <h3 class="text-lg text-white font-semibold mb-3">Stay Updated</h3>
-        <p class="text-sm text-gray-300 mb-2">Subscribe to my newsletter for the latest tech insights and project updates!</p>
-        <div class="flex justify-center">
-          <input type="email" id="newsletter-email" placeholder="Enter your email" class="w-full max-w-xs px-3 py-2 bg-gray-800 text-white rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-teal-600">
-          <button onclick="subscribeNewsletter()" class="ml-2 px-3 py-2 bg-teal-700 text-white rounded-md hover:bg-teal-600">Subscribe</button>
-        </div>
-        <p class="text-sm text-white">Email: <a href="mailto:dominic.njangnabe@stu.ucc.edu.gh" class="hover:text-gray-200 transition duration-200">dominic.njangnabe@stu.ucc.edu.gh</a></p>
-        <p class="text-sm text-white">Phone: <a href="tel:+233551283612" class="hover:text-gray-200 transition duration-200">0551283612/0246053688</a></p>
+        <h3 class="text-lg text-white font-semibold mb-3">Contact</h3>
+        <p class="text-sm text-gray-300 mb-2">Email: <a href="mailto:dominic.njangnabe@stu.ucc.edu.gh" class="hover:text-gray-200 transition duration-200">dominic.njangnabe@stu.ucc.edu.gh</a></p>
+        <p class="text-sm text-gray-300">Phone: <a href="tel:+233551283612" class="hover:text-gray-200 transition duration-200">0551283612 / 0246053688</a></p>
+        <p class="text-xs text-gray-400 mt-2">Last Updated: March 17, 2026</p>
       </div>
       <div class="footer-section">
         <h3 class="text-lg text-white font-semibold mb-3">Quick Links</h3>
-        <div class="footer-nav flex justify-center gap-3 mt-4">
+        <div class="footer-nav flex flex-wrap justify-center gap-3 mt-4">
           <a href="index.html" class="hover:text-gray-200 transition duration-200">Home</a>
           <a href="about.html" class="hover:text-gray-200 transition duration-200">My Profile</a>
           <a href="projects.html" class="hover:text-gray-200 transition duration-200">Projects</a>
@@ -653,6 +671,9 @@
         </div>
         <a href="#content" class="back-to-top inline-block px-6 py-2 bg-blue-800 text-white rounded-lg mt-6 hover:bg-blue-700 transition duration-200 shadow-md">Back to Top</a>
       </div>
+    </div>
+    <div class="footer-bottom text-center mt-4">
+      <p class="text-sm text-white font-medium mb-2">© 2026 Dominic Njangnabe. All rights reserved.</p>
     </div>
   </footer>
 

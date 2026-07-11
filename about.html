@@ -11,16 +11,34 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="icon" type="image/jpg" href="/assets/emojis.png">
   <style>
+    :root {
+      --surface-bg: radial-gradient(circle at 20% 20%, #112336 0%, #09131f 45%, #050a14 100%);
+      --surface-card: linear-gradient(145deg, rgba(26, 60, 60, 0.9), rgba(42, 96, 96, 0.9));
+      --surface-panel: linear-gradient(135deg, #0f2b4f 0%, #0c1b34 100%);
+      --accent: #1d7fa6;
+      --accent2: #22a5c3;
+      --text: #e8efff;
+      --text-muted: #dbe8ff;
+      --text-strong: #fff;
+      --button-bg: #22a5c3;
+      --button-hover-bg: #1fa5c7;
+      --footer-bg: #0f3d7d;
+      --footer-btn-bg: #2a4a8b;
+      --footer-btn-hover: #3a5aab;
+      --box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      --box-shadow-strong: 0 6px 12px rgba(0,0,0,0.2);
+    }
     body {
-      font-family: 'Arial', sans-serif;
-      background-color: #1A3C3C;
-      color: #E0E7E8;
+      font-family: 'Inter', 'Arial', sans-serif;
+      background: var(--surface-bg);
+      color: var(--text);
       margin: 0;
       padding: 0;
       line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
      .navbar {
-      background-color: #0a2351;
+      background: var(--surface-panel);
       padding: 1rem 2rem;
       display: flex;
       justify-content: center;
@@ -72,7 +90,7 @@
       margin-left: 1.5rem;
     }
     .nav-links a {
-      color: #E0E7E8;
+      color: var(--text);
       text-decoration: none;
       transition: color 0.3s ease, background-color 0.3s ease;
       display: flex;
@@ -84,12 +102,12 @@
       margin-right: 0.5rem;
     }
     .nav-links a:hover {
-      color: #fff;
-      background-color: #2a6f6f;
+      color: var(--text-strong);
+      background-color: var(--accent);
     }
     .nav-links a.nav-active {
-      background-color: #3a8f8f;
-      color: #fff;
+      background-color: var(--accent2);
+      color: var(--text-strong);
       font-weight: 600;
     }
     .sidebar {
@@ -98,8 +116,8 @@
       left: -280px;
       width: 280px;
       height: 100%;
-      background: linear-gradient(180deg, #1A3C3C, #2a6f6f);
-      color: #E0E7E8;
+      background: linear-gradient(180deg, #0d2d5a, var(--accent));
+      color: var(--text-muted);
       padding: 2rem 1.5rem;
       display: flex;
       flex-direction: column;
@@ -126,7 +144,7 @@
       margin-bottom: 1.2rem;
     }
     .sidebar-nav a {
-      color: #E0E7E8;
+      color: var(--text-muted);
       text-decoration: none;
       display: flex;
       align-items: center;
@@ -138,12 +156,12 @@
       margin-right: 0.75rem;
     }
     .sidebar-nav a:hover {
-      background-color: #3a8f8f;
-      color: #fff;
+      background-color: var(--accent2);
+      color: var(--text-strong);
     }
     .sidebar-nav a.nav-active {
-      background-color: #3a8f8f;
-      color: #fff;
+      background-color: var(--accent2);
+      color: var(--text-strong);
       font-weight: 600;
     }
     .content {
@@ -158,8 +176,8 @@
       margin-left: 280px;
     }
     .hero {
+      background: var(--surface-card);
       padding: 2rem;
-      background: linear-gradient(145deg, rgba(26, 60, 60, 0.9), rgba(42, 96, 96, 0.9));
       border-radius: 8px;
       margin-bottom: 2rem;
     }
@@ -168,18 +186,75 @@
     }
     .info-cards, .achievement-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(2, minmax(280px, 1fr));
       gap: 1.5rem;
       justify-content: center;
       margin-bottom: 2rem;
     }
+    .achievement-card-wide {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+    }
+    .achievement-card-wide h2 {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .achievement-card-wide .achievement-image-grid {
+      flex: 1 1 580px;
+      max-width: 58%;
+      min-width: 320px;
+      position: relative;
+    }
+    .achievement-card-wide .achievement-text {
+      flex: 1 1 320px;
+      max-width: 42%;
+      min-width: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .achievement-card-wide .achievement-text p {
+      margin: 0;
+      text-align: left;
+    }
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 2.4rem;
+      height: 2.4rem;
+      cursor: pointer;
+      z-index: 5;
+      display: grid;
+      place-content: center;
+      transition: background-color 0.2s ease;
+    }
+    .slider-nav:hover {
+      background: rgba(0, 0, 0, 0.65);
+    }
+    .slider-prev {
+      left: 0.75rem;
+    }
+    .slider-next {
+      right: 0.75rem;
+    }
     .info-card, .achievement-card {
-      background: linear-gradient(145deg, rgba(26, 60, 60, 0.9), rgba(42, 96, 96, 0.9));
+      background: var(--surface-card);
       padding: 1.75rem;
       border-radius: 8px;
       text-align: left;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--box-shadow);
     }
     .info-card:hover, .achievement-card:hover {
       transform: translateY(-5px);
@@ -204,6 +279,34 @@
       margin-bottom: 1rem;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
+    .achievement-image-grid {
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      margin: 0 auto 1rem auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+    .slider-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.7s ease-in-out;
+      transform: translateX(0%);
+    }
+    .slider-track img {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      margin: 0;
+      border-radius: 0;
+    }
+    /* removed keyframes for JS-controlled sliding */
     .achievement-card p {
       font-size: 0.95rem;
       margin-bottom: 1rem;
@@ -211,14 +314,14 @@
     .btn {
       display: inline-block;
       padding: 0.75rem 1.5rem;
-      background-color: #2a6f6f;
-      color: #E0E7E8;
+      background-color: var(--button-bg);
+      color: #0b1b2f;
       text-decoration: none;
       border-radius: 5px;
       transition: background-color 0.3s ease;
     }
     .btn:hover {
-      background-color: #3a8f8f;
+      background-color: var(--button-hover-bg);
     }
     .icon-circle {
       display: inline-flex;
@@ -227,17 +330,17 @@
       width: 2rem;
       height: 2rem;
       border-radius: 50%;
-      background-color: #2a6f6f;
-      color: #E0E7E8;
+      background-color: var(--accent);
+      color: var(--text-muted);
       text-decoration: none;
       transition: background-color 0.3s ease;
     }
     .icon-circle:hover {
-      background-color: #3a8f8f;
+      background-color: var(--accent2);
     }
     footer {
-      background-color: #0a2351;
-      color: #e2e8f0;
+      background-color: var(--footer-bg);
+      color: var(--text-muted);
       padding: 1.5rem 0;
       position: relative;
       z-index: 1000;
@@ -256,7 +359,7 @@
       text-align: center;
     }
     .footer-section p, .footer-section a {
-      color: #e2e8f0;
+      color: var(--text-muted);
       text-decoration: none;
       transition: color 0.3s ease;
     }
@@ -270,7 +373,9 @@
     }
     .footer-nav {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 0.75rem;
     }
     .back-to-top {
@@ -368,6 +473,14 @@
     .animate-slideIn {
       animation: slideIn 0.5s ease-in-out;
     }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
     @keyframes slideIn {
       from {
         opacity: 0;
@@ -391,6 +504,7 @@
   </style>
 </head>
 <body>
+  <a href="#main-content" class="skip-link" style="position:absolute; top:-40px; left:0; background:#fff; color:#000; padding:0.5rem 1rem; z-index:999; transition:top 0.2s ease;" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Skip to main content</a>
   <nav class="navbar">
     <div class="navbar-content">
       <div class="navbar-brand">👨‍💻 Dominic Njangnabe</div>
@@ -425,12 +539,13 @@
     </div>
   </div>
 
-  <div class="content" id="content">
+  <div class="content" id="main-content">
     <section class="hero">
       <div class="hero-text">
         <h1 class="text-6xl font-bold text-teal-100 mb-4">About Me</h1>
         <p class="text-lg text-gray-200 mb-4">My Background and Journey</p>
-        <p class="text-md text-gray-300 mb-6">Learn about my education, experiences, and achievements as a BSc IT student at the University of Cape Coast, with a passion for database Management, programming, and data analysis.</p>
+        <p class="text-md text-gray-300 mb-6">Learn about my education, experiences, and achievements as a BSc IT student at the University of Cape Coast, with a passion for data Engineering, database Management, programming, and data analysis.</p>
+        <p class="text-md text-gray-300 mb-6">Excited to share that I have been appointed as the Organizing Chair and IT Coordinator for the University of Cape Coast Chapter of the National Society of Black Engineers (NSBE UCC)! Our mission is to support STEM students through mentorship, networking, and professional development opportunities. Together, we're fostering diversity and empowering future leaders in engineering and technology. </p>
       </div>
     </section>
 
@@ -470,40 +585,43 @@
         <img src="citation.jpg" alt="Database Club Lead Citation" class="achievement-image">
         <p class="text-md text-gray-300">Received a citation as Database Club Lead for the Computer Science and Information Technology Students Association at UCC, recognizing my leadership in advancing database technologies and fostering innovation among peers.</p>
       </div>
+      <div class="achievement-card achievement-card-wide">
+        <h2 class="text-2xl font-bold text-teal-100 mb-4">University of Cincinnati, USA Visit to UCC, Ghana </h2>
+        <div class="achievement-image-grid">
+          <div class="slider-track">
+            <img src="NSBE%20UC1.jpeg" alt="NSBE UCC hosting UC Cincinnati students" class="achievement-image" loading="lazy">
+            <img src="NSBE%20UC2.jpeg" alt="NSBE UCC campus tour" class="achievement-image" loading="lazy">
+            <img src="NSBE%20UC3.jpeg" alt="NSBE UCC group photo" class="achievement-image" loading="lazy">
+            <img src="NSBE%20UC4.jpeg" alt="NSBE UCC group photo" class="achievement-image" loading="lazy">
+            <img src="NSBE%20UC5.jpeg" alt="NSBE UCC group photo" class="achievement-image" loading="lazy">
+            <img src="NSBE%20UC6.jpeg" alt="NSBE UCC group photo" class="achievement-image" loading="lazy">
+            <img src="NSBE%20UC7.jpeg" alt="NSBE UCC group photo" class="achievement-image" loading="lazy">
+            <img src="NSBE%20UC8.jpeg" alt="NSBE UCC group photo" class="achievement-image" loading="lazy">
+            <img src="NSBE%20UC9.jpeg" alt="NSBE UCC group photo" class="achievement-image" loading="lazy">
+            <img src="NSBE%20UC11.jpeg" alt="NSBE UCC group photo" class="achievement-image" loading="lazy">
+            <img src="NSBE%20UC22.jpeg" alt="NSBE UCC group photo" class="achievement-image" loading="lazy">
+          </div>
+          <button class="slider-nav slider-prev" aria-label="Previous slide">◀</button>
+          <button class="slider-nav slider-next" aria-label="Next slide">▶</button>
+        </div>
+        <div class="achievement-text">
+          <p class="text-md text-gray-300"> I'm honored to have played a key role in guiding the University of Cincinnati College of Engineering students from the USA 🇺🇸 as they toured Ghana through the Office of international relations, UCC! The visit was officially hosted by the Office of International Relations at UCC. As Organizing Chair and IT Coordinator for NSBE UCC, I had the privilege of meeting my fellow NSBE members from University of Cincinnati, showing them around our campus and facilitating their exploration of engineering at my school. From touring our facilities to sharing insights and experiencing Ghanaian culture together, it was inspiring to see their excitement engaging with our students. These moments remind me of the power of global connections. Grateful to have been part of their Ghana experience! 🇬🇭🇺🇸🔧🌍</p>
+        </div>
+      </div>
     </section>
   </div>
 
   <footer class="footer relative py-6">
-    <div class="footer-content max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-4 gap-6 text-center">
+    <div class="footer-content max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6 text-center">
       <div class="footer-section">
-        <p class="text-sm text-white font-medium mb-2">© 2025 Dominic Njangnabe. All rights reserved.</p>
-        <div class="decorative-line"></div>
-        <p class="text-xs text-gray-400 mt-2">Last Updated: September 03, 2025</p>
-      </div>
-      <div class="footer-section">
-        <h3 class="text-lg text-white font-semibold mb-3">About Me</h3>
-        <p class="text-sm text-gray-300">A passionate BSc IT student at the University of Cape Coast, specializing in database design with MySQL, Oracle, PostgreSQL, and AWS RDS, automation with Python, programming with PHP, and data analysis with Excel and Power BI. Recognized as Database Club Lead (2025)</p>
-        <div class="footer-social flex justify-center gap-4 mt-4">
-          <a href="https://www.facebook.com/njangnabe.dominic.5" class="icon-circle"><i class="fab fa-facebook-f text-lg"></i></a>
-          <a href="#" class="icon-circle"><i class="fab fa-twitter text-lg"></i></a>
-          <a href="https://www.linkedin.com/in/dominic-njangnabe-15163a2ab/" class="icon-circle"><i class="fab fa-linkedin-in text-lg"></i></a>
-          <a href="https://github.com/Badime111" class="icon-circle"><i class="fab fa-github text-lg"></i></a>
-          <a href="#" class="icon-circle"><i class="fab fa-instagram text-lg"></i></a>
-        </div>
-      </div>
-      <div class="footer-section">
-        <h3 class="text-lg text-white font-semibold mb-3">Stay Updated</h3>
-        <p class="text-sm text-gray-300 mb-2">Subscribe to my newsletter for the latest tech insights and project updates!</p>
-        <div class="flex justify-center">
-          <input type="email" id="newsletter-email" placeholder="Enter your email" class="w-full max-w-xs px-3 py-2 bg-gray-800 text-white rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-teal-600">
-          <button onclick="subscribeNewsletter()" class="ml-2 px-3 py-2 bg-teal-700 text-white rounded-md hover:bg-teal-600">Subscribe</button>
-        </div>
-        <p class="text-sm text-white">Email: <a href="mailto:dominic.njangnabe@stu.ucc.edu.gh" class="hover:text-gray-200 transition duration-200">dominic.njangnabe@stu.ucc.edu.gh</a></p>
-        <p class="text-sm text-white">Phone: <a href="tel:+233551283612" class="hover:text-gray-200 transition duration-200">0551283612/0246053688</a></p>
+        <h3 class="text-lg text-white font-semibold mb-3">Contact</h3>
+        <p class="text-sm text-gray-300 mb-2">Email: <a href="mailto:dominic.njangnabe@stu.ucc.edu.gh" class="hover:text-gray-200 transition duration-200">dominic.njangnabe@stu.ucc.edu.gh</a></p>
+        <p class="text-sm text-gray-300">Phone: <a href="tel:+233551283612" class="hover:text-gray-200 transition duration-200">0551283612 / 0246053688</a></p>
+        <p class="text-xs text-gray-400 mt-2">Last Updated: March 17, 2026</p>
       </div>
       <div class="footer-section">
         <h3 class="text-lg text-white font-semibold mb-3">Quick Links</h3>
-        <div class="footer-nav flex justify-center gap-3 mt-4">
+        <div class="footer-nav flex flex-wrap justify-center gap-3 mt-4">
           <a href="index.html" class="hover:text-gray-200 transition duration-200">Home</a>
           <a href="about.html" class="hover:text-gray-200 transition duration-200">My Profile</a>
           <a href="projects.html" class="hover:text-gray-200 transition duration-200">Projects</a>
@@ -513,6 +631,9 @@
         </div>
         <a href="#content" class="back-to-top inline-block px-6 py-2 bg-blue-800 text-white rounded-lg mt-6 hover:bg-blue-700 transition duration-200 shadow-md">Back to Top</a>
       </div>
+    </div>
+    <div class="footer-bottom text-center mt-4">
+      <p class="text-sm text-white font-medium mb-2">© 2026 Dominic Njangnabe. All rights reserved.</p>
     </div>
   </footer>
 
@@ -560,6 +681,43 @@
 
       document.querySelectorAll('.info-card, .achievement-card').forEach(card => {
         observer.observe(card);
+      });
+
+      // NSBE image slider logic
+      const slider = document.querySelector('.slider-track');
+      const totalSlides = 11;
+      let currentSlide = 0;
+
+      function goToSlide(index) {
+        currentSlide = (index + totalSlides) % totalSlides;
+        slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+      }
+
+      function nextSlide() {
+        goToSlide(currentSlide + 1);
+      }
+
+      let sliderInterval = setInterval(nextSlide, 3000);
+
+      const sliderContainer = document.querySelector('.achievement-image-grid');
+      const prevBtn = document.querySelector('.slider-prev');
+      const nextBtn = document.querySelector('.slider-next');
+
+      function resetSliderInterval() {
+        clearInterval(sliderInterval);
+        sliderInterval = setInterval(nextSlide, 3000);
+      }
+
+      sliderContainer.addEventListener('mouseenter', () => clearInterval(sliderInterval));
+      sliderContainer.addEventListener('mouseleave', resetSliderInterval);
+
+      prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlide - 1);
+        resetSliderInterval();
+      });
+      nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlide + 1);
+        resetSliderInterval();
       });
     });
     // Highlight active nav link
